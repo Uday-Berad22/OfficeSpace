@@ -1,29 +1,23 @@
-import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/db';
+import { NextRequest, NextResponse } from 'next/server';
+import { getDatabase } from '@/lib/database';
 
-export async function POST(req: Request) {
-  const { userId, subject, description } = await req.json();
-
+export async function POST(req: NextRequest) {
   try {
-    const client = await clientPromise;
-    const db = client.db();
+    const db = await getDatabase();
+    const { user_id, subject, description } = await req.json();
 
-    const user = await db.collection('users').findOne({ _id:(userId) });
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    await db.collection('complaints').insertOne({
-      user:(userId),
+    const complaint = {
+      user_id,
       subject,
       description,
-      date: new Date(),
+      created_at: new Date(),
       status: 'open'
-    });
+    };
 
+    await db.collection('complaints').insertOne(complaint);
     return NextResponse.json({ message: 'Complaint submitted successfully' }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'An error occurred while submitting the complaint' }, { status: 500 });
+    return NextResponse.json({ message: 'Error submitting complaint' }, { status: 500 });
   }
 }

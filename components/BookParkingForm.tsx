@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormField,
@@ -10,73 +11,53 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
-type FormData = {
-  userId: string;
-  date: string;
-  area: number;
-};
+export default function BookParkingForm() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const form = useForm<{
+    user_id: string;
+  }>();
 
-export function BookParkingForm() {
-  const form = useForm<FormData>();
+  useEffect(() => {
+    const checkFormAvailability = () => {
+      const now = new Date();
+      const hour = now.getHours();
+      setIsFormOpen(hour >= 20 || hour < 0);
+    };
 
-  const onSubmit = async (data: FormData) => {
-    const response = await fetch("/api/book-parking", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    checkFormAvailability();
+    const interval = setInterval(checkFormAvailability, 60000); // Check every minute
 
-    if (response.ok) {
-      // Handle success
-    } else {
-      // Handle error
-    }
+    return () => clearInterval(interval);
+  }, []);
+
+  const onSubmit = async (data: { user_id: string }) => {
+    // Handle form submission
+    console.log(data);
+    // Here you would typically send this data to your API
   };
+
+  if (!isFormOpen) {
+    return <p>Booking is only available from 8 PM to 12 AM.</p>;
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="userId"
+          name="user_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>User ID</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your user ID" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="area"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Parking Area</FormLabel>
-              <FormControl>
-                <Input type="number" min="1" max="8" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Add more form fields as needed */}
         <Button type="submit">Book Parking</Button>
       </form>
     </Form>

@@ -1,46 +1,64 @@
-import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/db';
+import { NextRequest, NextResponse } from 'next/server';
+import { getDatabase } from '@/lib/database';
 
-export async function POST(req: Request) {
-  const { userId, date, area } = await req.json();
-    console.log(date);
-  // Check if the current time is between 8 PM and 12 AM
-  const now = new Date();
-  const currentHour = now.getHours();
-  if (currentHour < 20 || currentHour >= 24) {
-    return NextResponse.json({ error: 'Booking is only allowed between 8 PM and 12 AM' }, { status: 400 });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const client = await clientPromise;
-    const db = client.db("parking");
+    const db = await getDatabase();
+    const { user_id, ...bookingData } = await req.json();
 
-    const user = await db.collection('users').findOne({ _id: (userId) });
-    console.log(user);
+    // Check if the user has available tokens
+    const user = await db.collection('users').findOne({ user_id });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    if (user.tokens <= 0) {
-      return NextResponse.json({ error: 'No tokens available' }, { status: 400 });
-    }
-
-    await db.collection('parkings').insertOne({
-        user: (userId),
-      date: new Date(date),
-      area: parseInt(area),
-      status: 'pending',
-      createdAt: new Date()
+    // Check weekly token limit
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    const weeklyBookings = await db.collection('bookings').countDocuments({
+      user_id,
+      created_at: { $gte: weekStart }
     });
 
+    if (weeklyBookings >= 2) {
+      return NextResponse.json({ message: 'Weekly token limit reached' }, { status: 400 });
+    }
+
+    // Check monthly token limit
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    const monthlyBookings = await db.collection('bookings').countDocuments({
+      user_id,
+      created_at: { $gte: monthStart }
+    });
+
+    if (monthlyBookings >= 5) {
+      return NextResponse.json({ message: 'Monthly token limit reached' }, { status: 400 });
+    }
+
+    // Create booking
+    const booking = {
+      user_id,
+      ...bookingData,
+      created_at: new Date(),
+      status: 'pending'
+    };
+    await db.collection('bookings').insertOne(booking);
+
+    // Decrement token count
     await db.collection('users').updateOne(
-      { _id: (userId) },
-      { $inc: { tokens: -1 } }
+      { user_id },
+      { 
+        $inc: { 
+          weekly_token: -1,
+          monthly_token: -1
+        }
+      }
     );
 
-    return NextResponse.json({ message: 'Parking booked successfully' }, { status: 200 });
+    return NextResponse.json({ message: 'Booking created successfully' }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'An error occurred while booking parking' }, { status: 500 });
+    return NextResponse.json({ message: 'Error creating booking' }, { status: 500 });
   }
 }

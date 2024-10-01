@@ -1,5 +1,5 @@
 import React from "react";
-import { CarPoolingRequest } from "@/components/CarPoolingRequest";
+import CarPoolingRequest from "@/components/CarPoolingRequest";
 
 export default function CarPooling() {
   return (

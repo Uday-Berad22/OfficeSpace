@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormField,
@@ -10,98 +11,87 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-type FormData = {
-  userId: string;
-  date: string;
-  isDriver: boolean;
+interface CarPoolOffer {
+  user_id: string;
+  name: string;
   route: string;
-};
+  departure_time: string;
+}
 
-export function CarPoolingRequest() {
-  const form = useForm<FormData>();
+export default function CarPooling() {
+  const [offers, setOffers] = useState<CarPoolOffer[]>([]);
+  const form = useForm<CarPoolOffer>();
 
-  const onSubmit = async (data: FormData) => {
-    const response = await fetch("/api/car-pooling", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+  useEffect(() => {
+    // Fetch car pool offers from API
+    const fetchOffers = async () => {
+      // Replace with actual API call
+      const response = await fetch("/api/car-pool-offers");
+      const data = await response.json();
+      setOffers(data);
+    };
 
-    if (response.ok) {
-      // Handle success
-    } else {
-      // Handle error
-    }
+    fetchOffers();
+  }, []);
+
+  const onSubmit = async (data: CarPoolOffer) => {
+    // Handle form submission
+    console.log(data);
+    // Here you would typically send this data to your API
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="userId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>User ID</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your user ID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="isDriver"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-              <FormControl>
-                <input
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>I am offering a ride (driver)</FormLabel>
-              </div>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="route"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Route Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Describe your route or preferred pickup locations"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit Car Pooling Request</Button>
-      </form>
-    </Form>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Car Pooling</h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="route"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Route</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="departure_time"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Departure Time</FormLabel>
+                <FormControl>
+                  <Input type="time" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Offer Ride</Button>
+        </form>
+      </Form>
+
+      <h2 className="text-xl font-semibold mt-8 mb-4">Available Rides</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {offers.map((offer) => (
+          <Card key={offer.user_id}>
+            <CardHeader>
+              <CardTitle>{offer.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Route: {offer.route}</p>
+              <p>Departure: {offer.departure_time}</p>
+              <Button className="mt-2">Request Ride</Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
   );
 }

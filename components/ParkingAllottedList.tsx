@@ -9,48 +9,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type ParkingAllotment = {
-  userId: string;
-  userName: string;
-  area: number;
-  date: string;
-};
+interface Allocation {
+  user_id: string;
+  name: string;
+  parking_spot: string;
+  priority: number;
+}
 
 export function ParkingAllottedList() {
-  const [allotments, setAllotments] = useState<ParkingAllotment[]>([]);
+  const [allocations, setAllocations] = useState<Allocation[]>([]);
 
   useEffect(() => {
-    const fetchAllotments = async () => {
-      const response = await fetch("/api/parking-allotted");
-      if (response.ok) {
-        const data = await response.json();
-        setAllotments(data);
-      }
+    // Fetch allocations from API
+    const fetchAllocations = async () => {
+      // Replace with actual API call
+      const response = await fetch("/api/allocations");
+      const data = await response.json();
+      setAllocations(data);
     };
 
-    fetchAllotments();
+    fetchAllocations();
   }, []);
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>User</TableHead>
-          <TableHead>Area</TableHead>
-          <TableHead>Date</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {allotments.map((allotment, index) => (
-          <TableRow key={index}>
-            <TableCell>{allotment.userName}</TableCell>
-            <TableCell>{allotment.area}</TableCell>
-            <TableCell>
-              {new Date(allotment.date).toLocaleDateString()}
-            </TableCell>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Parking Allotted</h1>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>User ID</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Parking Spot</TableHead>
+            <TableHead>Priority</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {allocations.map((allocation) => (
+            <TableRow key={allocation.user_id}>
+              <TableCell>{allocation.user_id}</TableCell>
+              <TableCell>{allocation.name}</TableCell>
+              <TableCell>{allocation.parking_spot}</TableCell>
+              <TableCell>{allocation.priority}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
