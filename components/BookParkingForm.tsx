@@ -1,13 +1,13 @@
 "use client";
-// components/BookParkingForm.tsx
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -39,22 +39,16 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export function BookParkingForm() {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
-  const [weeklyTokens, setWeeklyTokens] = useState(2); // Mock data
-  const [monthlyTokens, setMonthlyTokens] = useState(5); // Mock data
+  const [weeklyTokens, setWeeklyTokens] = useState(2);
+  const [monthlyTokens, setMonthlyTokens] = useState(5);
   const [usermail, setUsermail] = useState<string | null>(null);
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email == null) {
-      router.push("/login");
-    } else {
-      setUsermail(email);
-    }
-  }, [router]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       arrivalTime: "",
@@ -62,27 +56,46 @@ export function BookParkingForm() {
       specificReason: "",
       wantToCarPool: false,
       availableSeats: 0,
-      email: usermail || "",
+      email: "",
     },
   });
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    if (email == null) {
+      router.push("/login");
+    } else {
+      setUsermail(email);
+      form.setValue("email", email);
+    }
+  }, [router, form]);
+
+  useEffect(() => {
     async function getUser() {
-      const response = await fetch("/api/user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: usermail }),
-      });
-      const { user } = await response.json();
-      setWeeklyTokens(user.weekly_token);
-      setMonthlyTokens(user.monthly_token);
+      if (!usermail) return;
+
+      try {
+        const response = await fetch("/api/user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: usermail }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const { user } = await response.json();
+        setWeeklyTokens(user.weekly_token);
+        setMonthlyTokens(user.monthly_token);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setFormError("Failed to load user data. Please try again.");
+      }
     }
-    if (usermail) {
-      getUser();
-    }
+
+    getUser();
   }, [usermail]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: FormValues) => {
     try {
       const response = await fetch("/api/book-parking", {
         method: "POST",
@@ -93,17 +106,19 @@ export function BookParkingForm() {
       if (!response.ok) {
         throw new Error("Failed to submit booking");
       }
+
       const data = await response.json();
       setWeeklyTokens(data.remainingWeeklyTokens);
       setMonthlyTokens(data.remainingMonthlyTokens);
       form.reset();
+      setFormError(null);
     } catch (error) {
-      console.error(error);
+      console.error("Booking submission error:", error);
       setFormError(
         "An error occurred while submitting your booking. Please try again."
       );
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -178,7 +193,7 @@ export function BookParkingForm() {
               <div className="space-y-1 leading-none">
                 <FormLabel>Want to Car Pool?</FormLabel>
                 <FormDescription>
-                  Check this if you&#39;re willing to car pool with others.
+                  Check this if you're willing to car pool with others.
                 </FormDescription>
               </div>
             </FormItem>
@@ -195,7 +210,9 @@ export function BookParkingForm() {
                   <Input
                     type="number"
                     {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(parseInt(e.target.value, 10))
+                    }
                   />
                 </FormControl>
                 <FormDescription>
