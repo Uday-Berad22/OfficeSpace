@@ -44,7 +44,6 @@ export default function CarPooling() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Car Pooling</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -22,6 +23,7 @@ export default function Registration() {
     password: string;
     permanent_address: string;
     mobile_number: string;
+    distance: number;
   }>();
   const { toast } = useToast();
 
@@ -31,6 +33,7 @@ export default function Registration() {
     password: string;
     permanent_address: string;
     mobile_number: string;
+    distance: number;
   }) => {
     try {
       const response = await fetch("/api/auth/register", {
@@ -131,6 +134,26 @@ export default function Registration() {
                     <FormControl>
                       <Input type="tel" {...field} required />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="distance"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Distance</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value))
+                        }
+                      />
+                    </FormControl>
+                    <FormDescription>Enter Distance in KM</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

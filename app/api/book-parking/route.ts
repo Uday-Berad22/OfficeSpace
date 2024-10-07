@@ -1,62 +1,72 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/database';
+import { getDatabase, User } from '@/lib/database';
 
 export async function POST(req: NextRequest) {
   try {
     const db = await getDatabase();
-    const { user_id, ...bookingData } = await req.json();
+    const { arrivalTime, departureTime, specificReason, wantToCarPool, availableSeats,email } = await req.json();
 
-    // Check if the user has available tokens
-    const user = await db.collection('users').findOne({ user_id });
+    if (!email) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get user from database based on Clerk userId
+    const user = await db.collection<User>('users').findOne({ email: email });
+    
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     // Check weekly token limit
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    const weeklyBookings = await db.collection('bookings').countDocuments({
-      user_id,
-      created_at: { $gte: weekStart }
-    });
-
-    if (weeklyBookings >= 2) {
-      return NextResponse.json({ message: 'Weekly token limit reached' }, { status: 400 });
+    if (user.weekly_token < 1) {
+      return NextResponse.json({ message: 'No weekly tokens available' }, { status: 403 });
     }
 
     // Check monthly token limit
-    const monthStart = new Date();
-    monthStart.setDate(1);
-    const monthlyBookings = await db.collection('bookings').countDocuments({
-      user_id,
-      created_at: { $gte: monthStart }
-    });
-
-    if (monthlyBookings >= 5) {
-      return NextResponse.json({ message: 'Monthly token limit reached' }, { status: 400 });
+    if (user.monthly_token < 1) {
+      return NextResponse.json({ message: 'No monthly tokens available' }, { status: 403 });
     }
 
     // Create booking
-    const booking = {
-      user_id,
-      ...bookingData,
-      created_at: new Date(),
-      status: 'pending'
-    };
-    await db.collection('bookings').insertOne(booking);
+    const bookingResult = await db.collection('bookings').insertOne({
+      email,
+      arrivalTime,
+      departureTime,
+      specificReason,
+      wantToCarPool,
+      availableSeats,
+      createdAt: new Date(),
+      status: 'pending', // You can use this to track the booking status
+    });
+
+    if (!bookingResult.insertedId) {
+      return NextResponse.json({ message: 'Failed to create booking' }, { status: 500 });
+    }
 
     // Decrement token count
-    await db.collection('users').updateOne(
-      { user_id },
-      { 
-        $inc: { 
+    const updateResult = await db.collection<User>('users').updateOne(
+      { email: email },
+      {
+        $inc: {
           weekly_token: -1,
-          monthly_token: -1
+          monthly_token: -1,
         }
       }
     );
 
-    return NextResponse.json({ message: 'Booking created successfully' }, { status: 200 });
+    if (updateResult.modifiedCount === 0) {
+      // If update fails, we should roll back the booking creation
+      await db.collection('bookings').deleteOne({ _id: bookingResult.insertedId });
+      return NextResponse.json({ message: 'Failed to update token count' }, { status: 500 });
+    }
+
+    return NextResponse.json({ 
+      message: 'Booking created successfully',
+      bookingId: bookingResult.insertedId,
+      remainingWeeklyTokens: user.weekly_token - 1,
+      remainingMonthlyTokens: user.monthly_token - 1,
+    }, { status: 200 });
+
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: 'Error creating booking' }, { status: 500 });

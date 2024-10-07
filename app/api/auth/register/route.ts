@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 export async function POST(req: NextRequest) {
   try {
     const db = await getDatabase();
-    const { name, email, password, permanent_address, mobile_number } = await req.json();
+    const { name, email, password, permanent_address, mobile_number,distance } = await req.json();
 
     // Check if user already exists
     const existingUser = await db.collection('users').findOne({ email });
@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
       mobile_number,
       weekly_token: 2,
       monthly_token: 5,
-      distance: 0, // This should be calculated based on the address
+      distance, // This should be calculated based on the address
+      access_level: 1,
       created_at: new Date()
     };
 

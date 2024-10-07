@@ -32,7 +32,6 @@ export function ComplaintForm() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Make a Complaint</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

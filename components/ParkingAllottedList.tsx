@@ -33,7 +33,6 @@ export function ParkingAllottedList() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Parking Allotted</h1>
       <Table>
         <TableHeader>
           <TableRow>

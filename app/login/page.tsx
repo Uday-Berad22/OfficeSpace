@@ -33,13 +33,14 @@ export default function Login() {
 
       if (response.ok) {
         const { token, userId } = await response.json();
+        localStorage.setItem("email", data.email);
         localStorage.setItem("token", token);
         localStorage.setItem("userId", userId);
         toast({
           title: "Login Successful",
           description: "Welcome back!",
         });
-        router.push("/dashboard");
+        router.push("/book-parking");
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message);
