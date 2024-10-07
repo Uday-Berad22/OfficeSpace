@@ -1,6 +1,6 @@
 "use client";
 // components/BookParkingForm.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -44,9 +44,16 @@ export function BookParkingForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const [weeklyTokens, setWeeklyTokens] = useState(2); // Mock data
   const [monthlyTokens, setMonthlyTokens] = useState(5); // Mock data
-  if (localStorage.getItem("email") == null) {
-    router.push("/login");
-  }
+  const [usermail, setUsermail] = useState<string | null>(null);
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    if (email == null) {
+      router.push("/login");
+    } else {
+      setUsermail(email);
+    }
+  }, [router]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,12 +62,27 @@ export function BookParkingForm() {
       specificReason: "",
       wantToCarPool: false,
       availableSeats: 0,
-      email: localStorage.getItem("email") ?? "",
+      email: usermail || "",
     },
   });
 
+  useEffect(() => {
+    async function getUser() {
+      const response = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: usermail }),
+      });
+      const { user } = await response.json();
+      setWeeklyTokens(user.weekly_token);
+      setMonthlyTokens(user.monthly_token);
+    }
+    if (usermail) {
+      getUser();
+    }
+  }, [usermail]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     try {
       const response = await fetch("/api/book-parking", {
         method: "POST",
