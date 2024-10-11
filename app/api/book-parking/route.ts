@@ -1,17 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase, User } from '@/lib/database';
+import { currentUser } from '@clerk/nextjs/server'
 
 export async function POST(req: NextRequest) {
   try {
     const db = await getDatabase();
-    const { arrivalTime, departureTime,  wantToCarPool, availableSeats,email } = await req.json();
-
-    if (!email) {
+    const temp = await currentUser();
+    
+    if(!temp) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
+    const user = await db.collection<User>('users').findOne({ email: temp.emailAddresses[0].emailAddress });
+
+    if(!user) {
+      // If user is not found, create a new user
+      await db.collection<User>('users').insertOne({
+        email: temp.emailAddresses[0].emailAddress,
+        user_id: temp.id,
+        access_level: 'user',
+        name: temp.fullName || "User",
+        used_tokens: 0,
+      });
+
+    }
+    const { arrivalTime, departureTime,  wantToCarPool, availableSeats } = await req.json();
+
 
     // Get user from database based on Clerk userId
-    const user = await db.collection<User>('users').findOne({ email: email });
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -19,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // Create booking
     const bookingResult = await db.collection('bookings').insertOne({
-      email,
+      email: temp.emailAddresses[0].emailAddress,
       arrivalTime,
       departureTime,
       wantToCarPool,
@@ -34,7 +49,7 @@ export async function POST(req: NextRequest) {
 
     // Decrement token count
     const updateResult = await db.collection<User>('users').updateOne(
-      { email: email },
+      { email: temp.emailAddresses[0].emailAddress },
       {
         $inc: {
           used_tokens: 1,

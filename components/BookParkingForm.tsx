@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { bookParking } from "../actions/bookParking";
 
 const formSchema = z.object({
   arrivalTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
@@ -28,15 +28,13 @@ const formSchema = z.object({
   }),
   wantToCarPool: z.boolean().default(false),
   availableSeats: z.number().min(0).max(4).optional(),
-  email: z.string().email(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export function BookParkingForm() {
-  const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
-  const [usermail, setUsermail] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -45,40 +43,27 @@ export function BookParkingForm() {
       departureTime: "",
       wantToCarPool: false,
       availableSeats: 0,
-      email: "",
     },
   });
 
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email == null) {
-      router.push("/login");
-    } else {
-      setUsermail(email);
-      form.setValue("email", email);
-    }
-  }, [router, form]);
-
   const onSubmit = async (values: FormValues) => {
-    try {
-      const response = await fetch("/api/book-parking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+    setFormError(null);
+    setFormSuccess(null);
 
-      if (!response.ok) {
-        throw new Error("Failed to submit booking");
-      }
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value.toString());
+    });
 
-      const data = await response.json();
-      form.reset();
-      setFormError(null);
-    } catch (error) {
-      console.error("Booking submission error:", error);
-      setFormError(
-        "An error occurred while submitting your booking. Please try again."
+    const result = await bookParking(formData);
+
+    if (result.error) {
+      setFormError(result.error);
+    } else {
+      setFormSuccess(
+        typeof result.success === "string" ? result : "Booking successful!"
       );
+      form.reset();
     }
   };
 
@@ -165,8 +150,12 @@ export function BookParkingForm() {
       </form>
       {formError && (
         <Alert variant="destructive" className="mt-4">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{formError}</AlertDescription>
+          <AlertTitle>Error: {formError}</AlertTitle>
+        </Alert>
+      )}
+      {formSuccess && (
+        <Alert variant="default" className="mt-4">
+          <AlertTitle>{formSuccess}</AlertTitle>
         </Alert>
       )}
     </Form>

@@ -6,10 +6,8 @@ export interface User {
   email: string;
   user_id: string;
   name: string;
-  mobile_number: string;
-  password: string;
   used_tokens: number;
-  access_level: number;
+  access_level: 'user' | 'admin';
 }
 
 export async function getDatabase() {
