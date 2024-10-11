@@ -1,4 +1,6 @@
-import {  NextResponse } from 'next/server';
+
+
+import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/database';
 import { Db, ObjectId } from 'mongodb';
 
@@ -11,9 +13,7 @@ interface Booking {
 
 interface User {
   user_id: string;
-  weekly_token: number;
-  monthly_token: number;
-  distance: number;
+  used_tokens: number;
 }
 
 interface Allocation {
@@ -35,10 +35,10 @@ export async function POST() {
     const availableSpots = 8; // Assuming 8 spots are available
 
     // Sort bookings by priority
-    const sortedBookings = await sortBookingsByPriority(db, pendingBookings);
+    const sortedBookings = await sortBookingsByPriority(db, pendingBookings, availableSpots);
 
     // Allocate parking spots
-    const allocations: Allocation[] = sortedBookings.slice(0, availableSpots).map((booking, index) => ({
+    const allocations: Allocation[] = sortedBookings.map((booking, index) => ({
       user_id: booking.user_id,
       parking_spot: `Spot ${index + 1}`,
       booking_id: booking._id
@@ -62,7 +62,7 @@ export async function POST() {
   }
 }
 
-async function sortBookingsByPriority(db: Db, bookings: Booking[]): Promise<Booking[]> {
+async function sortBookingsByPriority(db: Db, bookings: Booking[], numToSelect: number): Promise<Booking[]> {
   const userIds = bookings.map(booking => booking.user_id);
   const users: User[] = await db.collection('users')
     .find({ user_id: { $in: userIds } })
@@ -73,20 +73,50 @@ async function sortBookingsByPriority(db: Db, bookings: Booking[]): Promise<Book
     return map;
   }, {});
 
-  return bookings.sort((a: Booking, b: Booking) => {
-    const userA = userMap[a.user_id];
-    const userB = userMap[b.user_id];
+  const usersWithTokens: [string, number][] = bookings.map(booking => [booking.user_id, userMap[booking.user_id]?.used_tokens || 0]);
 
-    // Priority 1: Token availability
-    if (userA.weekly_token > 0 || userA.monthly_token > 0) {
-      if (userB.weekly_token === 0 && userB.monthly_token === 0) {
-        return -1;
+  function selectIds(users: [string, number][], numToSelect: number): string[] {
+    users.sort((a, b) => a[1] - b[1]);
+    const groups: { [key: number]: string[] } = {};
+    for (const [id, tokens] of users) {
+      if (!groups[tokens]) {
+        groups[tokens] = [];
       }
-    } else if (userB.weekly_token > 0 || userB.monthly_token > 0) {
-      return 1;
+      groups[tokens].push(id);
     }
+    const selectedIds: string[] = [];
+    const tokenCounts = Object.keys(groups).map(Number).sort((a, b) => a - b);
+    for (const tokenCount of tokenCounts) {
+      const group = groups[tokenCount];
+      if (group.length + selectedIds.length <= numToSelect) {
+        selectedIds.push(...group);
+      } else {
+        const remaining = numToSelect - selectedIds.length;
+        const shuffled = group.sort(() => 0.5 - Math.random());
+        selectedIds.push(...shuffled.slice(0, remaining));
+      }
+      if (selectedIds.length === numToSelect) {
+        break;
+      }
+    }
+    for (const id of selectedIds) {
+      const user = users.find(user => user[0] === id);
+      if (user) {
+        user[1]++;
+      }
+    }
+    return selectedIds;
+  }
 
-    // Priority 2: Distance
-    return userB.distance - userA.distance;
-  });
+  const selectedIds = selectIds(usersWithTokens, numToSelect);
+  
+  // Update used_tokens in the database
+  await Promise.all(selectedIds.map(id => 
+    db.collection('users').updateOne(
+      { user_id: id },
+      { $inc: { used_tokens: 1 } }
+    )
+  ));
+
+  return bookings.filter(booking => selectedIds.includes(booking.user_id));
 }

@@ -6,12 +6,9 @@ export interface User {
   email: string;
   user_id: string;
   name: string;
-  permanent_address: string;
   mobile_number: string;
   password: string;
-  monthly_token: number;
-  weekly_token: number;
-  distance: number;
+  used_tokens: number;
   access_level: number;
 }
 

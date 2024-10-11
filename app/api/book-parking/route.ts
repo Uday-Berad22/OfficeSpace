@@ -4,7 +4,7 @@ import { getDatabase, User } from '@/lib/database';
 export async function POST(req: NextRequest) {
   try {
     const db = await getDatabase();
-    const { arrivalTime, departureTime, specificReason, wantToCarPool, availableSeats,email } = await req.json();
+    const { arrivalTime, departureTime,  wantToCarPool, availableSeats,email } = await req.json();
 
     if (!email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -17,22 +17,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    // Check weekly token limit
-    if (user.weekly_token < 1) {
-      return NextResponse.json({ message: 'No weekly tokens available' }, { status: 403 });
-    }
-
-    // Check monthly token limit
-    if (user.monthly_token < 1) {
-      return NextResponse.json({ message: 'No monthly tokens available' }, { status: 403 });
-    }
-
     // Create booking
     const bookingResult = await db.collection('bookings').insertOne({
       email,
       arrivalTime,
       departureTime,
-      specificReason,
       wantToCarPool,
       availableSeats,
       createdAt: new Date(),
@@ -48,8 +37,7 @@ export async function POST(req: NextRequest) {
       { email: email },
       {
         $inc: {
-          weekly_token: -1,
-          monthly_token: -1,
+          used_tokens: 1,
         }
       }
     );
@@ -63,8 +51,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ 
       message: 'Booking created successfully',
       bookingId: bookingResult.insertedId,
-      remainingWeeklyTokens: user.weekly_token - 1,
-      remainingMonthlyTokens: user.monthly_token - 1,
+      used_tokens: user.used_tokens + 1,
     }, { status: 200 });
 
   } catch (error) {

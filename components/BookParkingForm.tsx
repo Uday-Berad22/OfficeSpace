@@ -18,13 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const formSchema = z.object({
   arrivalTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
@@ -33,7 +26,6 @@ const formSchema = z.object({
   departureTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
     message: "Invalid time format. Use HH:MM (24-hour format).",
   }),
-  specificReason: z.string().min(1, { message: "Please select a reason" }),
   wantToCarPool: z.boolean().default(false),
   availableSeats: z.number().min(0).max(4).optional(),
   email: z.string().email(),
@@ -44,8 +36,6 @@ type FormValues = z.infer<typeof formSchema>;
 export function BookParkingForm() {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
-  const [weeklyTokens, setWeeklyTokens] = useState(2);
-  const [monthlyTokens, setMonthlyTokens] = useState(5);
   const [usermail, setUsermail] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
@@ -53,7 +43,6 @@ export function BookParkingForm() {
     defaultValues: {
       arrivalTime: "",
       departureTime: "",
-      specificReason: "",
       wantToCarPool: false,
       availableSeats: 0,
       email: "",
@@ -70,31 +59,6 @@ export function BookParkingForm() {
     }
   }, [router, form]);
 
-  useEffect(() => {
-    async function getUser() {
-      if (!usermail) return;
-
-      try {
-        const response = await fetch("/api/user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: usermail }),
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
-        }
-        const { user } = await response.json();
-        setWeeklyTokens(user.weekly_token);
-        setMonthlyTokens(user.monthly_token);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setFormError("Failed to load user data. Please try again.");
-      }
-    }
-
-    getUser();
-  }, [usermail]);
-
   const onSubmit = async (values: FormValues) => {
     try {
       const response = await fetch("/api/book-parking", {
@@ -108,8 +72,6 @@ export function BookParkingForm() {
       }
 
       const data = await response.json();
-      setWeeklyTokens(data.remainingWeeklyTokens);
-      setMonthlyTokens(data.remainingMonthlyTokens);
       form.reset();
       setFormError(null);
     } catch (error) {
@@ -157,30 +119,6 @@ export function BookParkingForm() {
         />
         <FormField
           control={form.control}
-          name="specificReason"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Specific Reason</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a reason" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="meeting">Client Meeting</SelectItem>
-                  <SelectItem value="presentation">Presentation</SelectItem>
-                  <SelectItem value="earlyStart">Early Start</SelectItem>
-                  <SelectItem value="lateFinish">Late Finish</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="wantToCarPool"
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0">
@@ -193,7 +131,7 @@ export function BookParkingForm() {
               <div className="space-y-1 leading-none">
                 <FormLabel>Want to Car Pool?</FormLabel>
                 <FormDescription>
-                  Check this if you're willing to car pool with others.
+                  Check this if you&apos;re willing to car pool with others.
                 </FormDescription>
               </div>
             </FormItem>
@@ -223,11 +161,6 @@ export function BookParkingForm() {
             )}
           />
         )}
-
-        <div className="space-y-2">
-          <p>Weekly Tokens: {weeklyTokens}</p>
-          <p>Monthly Tokens: {monthlyTokens}</p>
-        </div>
         <Button type="submit">Submit Booking</Button>
       </form>
       {formError && (
