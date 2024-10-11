@@ -67,16 +67,16 @@ export async function bookParking(formData: FormData) {
     }
 
     // Decrement token count
-    const updateResult = await db.collection<User>('users').updateOne(
-      { email: temp.emailAddresses[0].emailAddress },
-      { $inc: { used_tokens: 1 } }
-    )
+    // const updateResult = await db.collection<User>('users').updateOne(
+    //   { email: temp.emailAddresses[0].emailAddress },
+    //   { $inc: { used_tokens: 1 } }
+    // )
 
-    if (updateResult.modifiedCount === 0) {
-      // If update fails, we should roll back the booking creation
-      await db.collection('bookings').deleteOne({ _id: bookingResult.insertedId })
-      return { error: 'Failed to update token count' }
-    }
+    // if (updateResult.modifiedCount === 0) {
+    //   // If update fails, we should roll back the booking creation
+    //   await db.collection('bookings').deleteOne({ _id: bookingResult.insertedId })
+    //   return { error: 'Failed to update token count' }
+    // }
 
     return { 
         success: true,
