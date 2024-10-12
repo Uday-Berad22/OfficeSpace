@@ -82,7 +82,7 @@
 //   }
 // }
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getDatabase } from "@/lib/database";
 import { ObjectId } from "mongodb";
 
@@ -101,14 +101,14 @@ interface User {
   used_tokens: number;
 }
 
-export async function POST(request: NextRequest) {
-  const { APP_KEY } = process.env;
-  const authHeader = request.headers.get("authorization");
-  const ACTION_KEY = authHeader ? authHeader.split(" ")[1] : null;
+export async function POST() {
+  // const { APP_KEY } = process.env;
+  // const authHeader = request.headers.get("authorization");
+  // const ACTION_KEY = authHeader ? authHeader.split(" ")[1] : null;
 
-  if (ACTION_KEY !== APP_KEY) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // if (ACTION_KEY !== APP_KEY) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
 
   try {
     const db = await getDatabase();
