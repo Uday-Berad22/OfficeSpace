@@ -1,0 +1,13 @@
+name: Cron-Job-For-Clear-Bookings
+on:
+  schedule:
+    - cron: "35 21 * * *"
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: daily-clear-bookings
+        run: |
+          curl --request POST \
+          --url 'https://office-space-kohl.vercel.app/api/clear-bookings' \
+          --header 'Authorization: Bearer ${{ secrets.ACTION_KEY }}'

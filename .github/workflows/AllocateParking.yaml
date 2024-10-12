@@ -1,0 +1,13 @@
+name: Cron-Job-For-Allocate-Parking
+on:
+  schedule:
+    - cron: "30 21 * * *"
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: daily-allocate-parking
+        run: |
+          curl --request POST \
+          --url 'https://office-space-kohl.vercel.app/api/allocate-parking' \
+          --header 'Authorization: Bearer ${{ secrets.ACTION_KEY }}'
