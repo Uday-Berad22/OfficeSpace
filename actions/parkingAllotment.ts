@@ -5,24 +5,22 @@ interface User {
   _id: ObjectId;
   name: string;
   tokens: number;
+  status: string;
+  parking_allotment: string;
 }
 
 interface Allocation {
   name: string;
-  parkingSpot: string;
+  
 }
 
 export async function allocateParking(): Promise<Allocation[]> {
-    
-  const users = await fetchUsersFromDatabase();
+  const db = await getDatabase();
+  const users = await db.collection('users').find({}).toArray() as User[];
+  
   const selectedIds = selectIds(users, 8);
   const allocations = await updateAllocationStatus(selectedIds);
   return allocations;
-}
-
-async function fetchUsersFromDatabase(): Promise<User[]> {
-    const db = await getDatabase();
-  return await db.collection("users").find({}).toArray() as User[];
 }
 
 function selectIds(users: User[], numToSelect: number): ObjectId[] {
@@ -57,7 +55,7 @@ function selectIds(users: User[], numToSelect: number): ObjectId[] {
 }
 
 async function updateAllocationStatus(selectedIds: ObjectId[]): Promise<Allocation[]> {
-    const db = await getDatabase();
+  const db = await getDatabase();
   
   // Update selected users' status and increment their tokens
   await db.collection("users").updateMany(

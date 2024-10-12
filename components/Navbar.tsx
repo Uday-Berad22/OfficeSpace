@@ -20,6 +20,12 @@ const Navbar = () => {
         <li>
           <Link href="/make-complaint">Make Complaint</Link>
         </li>
+        <li>
+          <Link href="/sign-in">SignIn</Link>
+        </li>
+        <li>
+          <Link href="/sign-up">SignUp</Link>
+        </li>
       </ul>
     </nav>
   );

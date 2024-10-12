@@ -8,6 +8,7 @@ export interface User {
   name: string;
   used_tokens: number;
   access_level: 'user' | 'admin';
+  parking_allotment?: string;
 }
 
 export async function getDatabase() {
