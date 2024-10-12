@@ -10,5 +10,5 @@ jobs:
       - name: daily-allocate-parking
         run: |
           curl --request POST \
-          --url 'https://office-space-kohl.vercel.app/api/allocate-parking' \
+          --url 'https://office-space-kohl.vercel.app/allocate-parking' \
           --header 'Authorization: Bearer ${{ secrets.ACTION_KEY }}'
