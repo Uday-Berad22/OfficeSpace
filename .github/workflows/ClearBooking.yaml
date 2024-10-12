@@ -1,7 +1,7 @@
 name: Cron-Job-For-Clear-Bookings
 on:
   schedule:
-    - cron: "35 21 * * *"
+    - cron: "15 16 * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
