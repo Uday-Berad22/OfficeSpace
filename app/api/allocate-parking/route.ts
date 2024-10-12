@@ -83,23 +83,23 @@
 // }
 
 import { NextResponse } from "next/server";
-import { getDatabase } from "@/lib/database";
-import { ObjectId } from "mongodb";
+// import { getDatabase } from "@/lib/database";
+// import { ObjectId } from "mongodb";
 
-interface Booking {
-  _id: ObjectId;
-  email: string;
-  arrivalTime: string;
-  departureTime: string;
-  wantToCarPool: boolean;
-  availableSeats: number;
-  status: string;
-}
+// interface Booking {
+//   _id: ObjectId;
+//   email: string;
+//   arrivalTime: string;
+//   departureTime: string;
+//   wantToCarPool: boolean;
+//   availableSeats: number;
+//   status: string;
+// }
 
-interface User {
-  email: string;
-  used_tokens: number;
-}
+// interface User {
+//   email: string;
+//   used_tokens: number;
+// }
 
 export async function POST() {
   // const { APP_KEY } = process.env;
