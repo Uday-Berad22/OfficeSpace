@@ -1,5 +1,6 @@
 name: Cron-Job-For-Clear-Bookings
 on:
+  workflow_dispatch:
   schedule:
     - cron: "15 16 * * *"
 jobs:

@@ -1,5 +1,6 @@
 name: Cron-Job-For-Allocate-Parking
 on:
+  workflow_dispatch:
   schedule:
     - cron: "10 16 * * *"
 jobs:
