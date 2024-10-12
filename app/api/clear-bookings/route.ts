@@ -1,9 +1,9 @@
 // File: app/api/clear-bookings/route.ts
 
-import { NextRequest, NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/database';
 
-export async function GET(req: NextRequest) {
+export async function GET( ) {
   try {
     // Check for a secret key to ensure this route is only called by authorized services
     // const authHeader = req.headers.get('authorization');
