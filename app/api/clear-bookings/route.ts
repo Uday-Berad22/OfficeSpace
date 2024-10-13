@@ -8,15 +8,20 @@ export async function GET(request: NextRequest) {
   // if (authHeader !== APP_KEY) {
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   // }
-  const { APP_KEY } = process.env;
+  // const { APP_KEY } = process.env;
 
-  // Get the URL of the request and parse the search parameters
-  const url = new URL(request.url);
-  const secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
+  // // Get the URL of the request and parse the search parameters
+  // const url = new URL(request.url);
+  // const secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
 
-  // Check if the secret in the query matches the one in the .env file
-  if (!secret || secret !== APP_KEY) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // // Check if the secret in the query matches the one in the .env file
+  // if (!secret || secret !== APP_KEY) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
+  if (
+    request.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
+  ) {
+    return NextResponse.json({ error: `Unauthorized ` }, { status: 401 });
   }
   try {
     const db = await getDatabase();

@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/allocate-parking",
+      "schedule": "30 18 * * *" // Runs at 12:00 AM IST (6:30 PM UTC)
+    },
+    {
+      "path": "/api/clear-bookings",
+      "schedule": "28 12 * * *" // Runs at 5:58 PM IST (12:28 PM UTC)
+    }
+  ]
+}
