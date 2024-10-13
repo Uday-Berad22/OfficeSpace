@@ -64,8 +64,11 @@ export async function GET(request: NextRequest) {
 
   // Get the URL of the request and parse the search parameters
   const url = new URL(request.url);
-  const secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
-
+  let secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
+  if (secret?.length !== 0 && secret !== undefined && secret !== null) {
+    //remove last character
+    secret = secret.slice(0, -1);
+  }
   // Check if the secret in the query matches the one in the .env file
   if (!secret || secret !== APP_KEY) {
     return NextResponse.json(
