@@ -54,10 +54,20 @@ function selectIds(users: [string, number][], numToSelect: number): string[] {
 }
 
 export async function GET(request: NextRequest) {
-  const { APP_KEY } = process.env;
-  const authHeader = request.headers.get("authorization");
+  //   const { APP_KEY } = process.env;
+  //   const authHeader = request.headers.get("authorization");
 
-  if (authHeader !== APP_KEY) {
+  //   if (authHeader !== APP_KEY) {
+  //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  //   }
+  const { APP_KEY } = process.env;
+
+  // Get the URL of the request and parse the search parameters
+  const url = new URL(request.url);
+  const secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
+
+  // Check if the secret in the query matches the one in the .env file
+  if (!secret || secret !== APP_KEY) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

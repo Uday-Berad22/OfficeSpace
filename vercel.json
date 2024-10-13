@@ -1,11 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/allocate-parking",
+      "path": "/api/allocate-parking?secret=monster@1234actionkey8758858862&&##lnds",
       "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/clear-bookings",
+      "path": "/api/clear-bookings?secret=monster@1234actionkey8758858862&&##lnds",
       "schedule": "58 17 * * *"
     }
   ]
