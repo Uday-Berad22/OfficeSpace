@@ -53,7 +53,7 @@ function selectIds(users: [string, number][], numToSelect: number): string[] {
   return selectedIds;
 }
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { APP_KEY } = process.env;
   const authHeader = request.headers.get("authorization");
 

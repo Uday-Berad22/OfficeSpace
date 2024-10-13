@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/database";
 
-export async function POST(request: NextRequest) {
+export async function GETOST(request: NextRequest) {
   const { APP_KEY } = process.env;
   const authHeader = request.headers.get("authorization");
 
