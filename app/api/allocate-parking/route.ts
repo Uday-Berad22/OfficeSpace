@@ -68,7 +68,10 @@ export async function GET(request: NextRequest) {
 
   // Check if the secret in the query matches the one in the .env file
   if (!secret || secret !== APP_KEY) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: `Unauthorized secret :${secret}` },
+      { status: 401 }
+    );
   }
 
   try {
