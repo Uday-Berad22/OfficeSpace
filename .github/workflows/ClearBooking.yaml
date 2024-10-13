@@ -10,5 +10,5 @@ jobs:
       - name: daily-clear-bookings
         run: |
           curl --request POST \
-          --url 'http://localhost:3000/api/clear-bookings' \
-          --header 'Authorization: Bearer ${{ secrets.ACTION_KEY }}'
+          --url 'https://office-space-kohl.vercel.app/api/clear-bookings' \
+          --header 'Authorization:  ${{ secrets.ACTION_KEY }}'

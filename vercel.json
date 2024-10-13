@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/allocate-parking",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/clear-bookings",
+      "schedule": "58 17 * * *"
+    }
+  ]
+}

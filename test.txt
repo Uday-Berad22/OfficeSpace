@@ -1,0 +1,553 @@
+
+--------------------pendingBookings 
+[
+  {
+    _id: 'eb0b6c9d-5a2d-468f-a3c2-769c9c21e7ef',
+    email: 'johndoe@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 3,
+    status: 'pending'
+  },
+  {
+    _id: '22326814-1a5e-419e-a9b0-f1eb7c4016ee',
+    email: 'janesmith@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 3,
+    status: 'pending'
+  },
+  {
+    _id: 'd0a52c67-47e2-46b9-8351-1225d4686cfe',
+    email: 'alicejohnson@mail.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '497ebf70-194e-4b85-a3fb-441430bd290f',
+    email: 'bobbrown@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 1,
+    status: 'pending'
+  },
+  {
+    _id: '08babc91-6b9c-431b-84ea-dec31856b888',
+    email: 'charliedavis@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 3,
+    status: 'pending'
+  },
+  {
+    _id: 'fe05e706-822b-4636-a444-858044deda4b',
+    email: 'emilyclark@mail.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '5ba13aed-a0d4-4c4c-a9b9-9a9fa386801a',
+    email: 'frankwhite@mail.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 1,
+    status: 'pending'
+  },
+  {
+    _id: 'e47d8ef8-57c1-4339-8e6c-57988402376b',
+    email: 'gracegreen@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 3,
+    status: 'pending'
+  },
+  {
+    _id: '03cc9921-0884-4c34-aef3-526068e720df',
+    email: 'henryhall@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 2,
+    status: 'pending'
+  },
+  {
+    _id: '125854d5-218d-4976-ae0f-f034446c37fa',
+    email: 'ivylee@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '799cc45d-a00a-4762-99ca-429cfc206ba5',
+    email: 'jackking@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '5374baf4-96a9-4b61-a3fd-c29800488e5d',
+    email: 'katyfox@mail.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 1,
+    status: 'pending'
+  },
+  {
+    _id: '2c3fa171-9b87-40f4-8541-3d3ea59afb02',
+    email: 'liammoore@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '89a0862a-a2dd-4749-98fc-53c9fe5d8ba0',
+    email: 'miawalker@mail.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 1,
+    status: 'pending'
+  },
+  {
+    _id: '452d9a83-e719-4643-b394-626cdffd9c18',
+    email: 'noahyoung@test.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '56e59eea-edcf-444d-95ce-e9dec909eab4',
+    email: 'oliviaadams@test.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: '097d2b42-39f8-451f-8129-6c4f0534bbae',
+    email: 'paulscott@test.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 0,
+    status: 'pending'
+  },
+  {
+    _id: 'fcf223ad-2583-46f7-8a73-7f5db6226b0d',
+    email: 'quinnallen@test.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 1,
+    status: 'pending'
+  },
+  {
+    _id: '443353d3-e217-46a8-ba8e-a789c82ab1a9',
+    email: 'ritabaker@test.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: false,
+    availableSeats: 2,
+    status: 'pending'
+  },
+  {
+    _id: '396a739f-6f78-43c6-b103-6d5be467fe7c',
+    email: 'stevecarter@example.com',
+    arrivalTime: '2024-10-15T08:00:00',
+    departureTime: '2024-10-15T17:00:00',
+    wantToCarPool: true,
+    availableSeats: 3,
+    status: 'pending'
+  }
+]
+--------------------bookingsByUser 
+{
+  'johndoe@example.com': [
+    {
+      _id: 'eb0b6c9d-5a2d-468f-a3c2-769c9c21e7ef',
+      email: 'johndoe@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 3,
+      status: 'pending'
+    }
+  ],
+  'janesmith@example.com': [
+    {
+      _id: '22326814-1a5e-419e-a9b0-f1eb7c4016ee',
+      email: 'janesmith@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 3,
+      status: 'pending'
+    }
+  ],
+  'alicejohnson@mail.com': [
+    {
+      _id: 'd0a52c67-47e2-46b9-8351-1225d4686cfe',
+      email: 'alicejohnson@mail.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'bobbrown@example.com': [
+    {
+      _id: '497ebf70-194e-4b85-a3fb-441430bd290f',
+      email: 'bobbrown@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 1,
+      status: 'pending'
+    }
+  ],
+  'charliedavis@example.com': [
+    {
+      _id: '08babc91-6b9c-431b-84ea-dec31856b888',
+      email: 'charliedavis@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 3,
+      status: 'pending'
+    }
+  ],
+  'emilyclark@mail.com': [
+    {
+      _id: 'fe05e706-822b-4636-a444-858044deda4b',
+      email: 'emilyclark@mail.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'frankwhite@mail.com': [
+    {
+      _id: '5ba13aed-a0d4-4c4c-a9b9-9a9fa386801a',
+      email: 'frankwhite@mail.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 1,
+      status: 'pending'
+    }
+  ],
+  'gracegreen@example.com': [
+    {
+      _id: 'e47d8ef8-57c1-4339-8e6c-57988402376b',
+      email: 'gracegreen@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 3,
+      status: 'pending'
+    }
+  ],
+  'henryhall@example.com': [
+    {
+      _id: '03cc9921-0884-4c34-aef3-526068e720df',
+      email: 'henryhall@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 2,
+      status: 'pending'
+    }
+  ],
+  'ivylee@example.com': [
+    {
+      _id: '125854d5-218d-4976-ae0f-f034446c37fa',
+      email: 'ivylee@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'jackking@example.com': [
+    {
+      _id: '799cc45d-a00a-4762-99ca-429cfc206ba5',
+      email: 'jackking@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'katyfox@mail.com': [
+    {
+      _id: '5374baf4-96a9-4b61-a3fd-c29800488e5d',
+      email: 'katyfox@mail.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 1,
+      status: 'pending'
+    }
+  ],
+  'liammoore@example.com': [
+    {
+      _id: '2c3fa171-9b87-40f4-8541-3d3ea59afb02',
+      email: 'liammoore@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'miawalker@mail.com': [
+    {
+      _id: '89a0862a-a2dd-4749-98fc-53c9fe5d8ba0',
+      email: 'miawalker@mail.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 1,
+      status: 'pending'
+    }
+  ],
+  'noahyoung@test.com': [
+    {
+      _id: '452d9a83-e719-4643-b394-626cdffd9c18',
+      email: 'noahyoung@test.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'oliviaadams@test.com': [
+    {
+      _id: '56e59eea-edcf-444d-95ce-e9dec909eab4',
+      email: 'oliviaadams@test.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'paulscott@test.com': [
+    {
+      _id: '097d2b42-39f8-451f-8129-6c4f0534bbae',
+      email: 'paulscott@test.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 0,
+      status: 'pending'
+    }
+  ],
+  'quinnallen@test.com': [
+    {
+      _id: 'fcf223ad-2583-46f7-8a73-7f5db6226b0d',
+      email: 'quinnallen@test.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 1,
+      status: 'pending'
+    }
+  ],
+  'ritabaker@test.com': [
+    {
+      _id: '443353d3-e217-46a8-ba8e-a789c82ab1a9',
+      email: 'ritabaker@test.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: false,
+      availableSeats: 2,
+      status: 'pending'
+    }
+  ],
+  'stevecarter@example.com': [
+    {
+      _id: '396a739f-6f78-43c6-b103-6d5be467fe7c',
+      email: 'stevecarter@example.com',
+      arrivalTime: '2024-10-15T08:00:00',
+      departureTime: '2024-10-15T17:00:00',
+      wantToCarPool: true,
+      availableSeats: 3,
+      status: 'pending'
+    }
+  ]
+}
+--------------------users  
+[
+  {
+    _id: 'uuid-3',
+    email: 'alicejohnson@mail.com',
+    user_id: 'user-uuid-3',
+    access_level: 'user',
+    name: 'AliceJohnson',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-1',
+    email: 'johndoe@example.com',
+    user_id: 'user-uuid-1',
+    access_level: 'user',
+    name: 'JohnDoe',
+    used_tokens: 2
+  },
+  {
+    _id: 'uuid-8',
+    email: 'gracegreen@example.com',
+    user_id: 'user-uuid-8',
+    access_level: 'user',
+    name: 'GraceGreen',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-15',
+    email: 'noahyoung@test.com',
+    user_id: 'user-uuid-15',
+    access_level: 'superuser',
+    name: 'NoahYoung',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-18',
+    email: 'quinnallen@test.com',
+    user_id: 'user-uuid-18',
+    access_level: 'user',
+    name: 'QuinnAllen',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-7',
+    email: 'frankwhite@mail.com',
+    user_id: 'user-uuid-7',
+    access_level: 'superuser',
+    name: 'FrankWhite',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-5',
+    email: 'charliedavis@example.com',
+    user_id: 'user-uuid-5',
+    access_level: 'admin',
+    name: 'CharlieDavis',
+    used_tokens: 3
+  },
+  {
+    _id: 'uuid-20',
+    email: 'stevecarter@example.com',
+    user_id: 'user-uuid-20',
+    access_level: 'user',
+    name: 'SteveCarter',
+    used_tokens: 2
+  },
+  {
+    _id: 'uuid-11',
+    email: 'jackking@example.com',
+    user_id: 'user-uuid-11',
+    access_level: 'superuser',
+    name: 'JackKing',
+    used_tokens: 2
+  }
+]
+--------------------usersForSelection
+[
+  [ 'alicejohnson@mail.com', 3 ],
+  [ 'johndoe@example.com', 2 ],
+  [ 'gracegreen@example.com', 3 ],
+  [ 'noahyoung@test.com', 3 ],
+  [ 'quinnallen@test.com', 3 ],
+  [ 'frankwhite@mail.com', 3 ],
+  [ 'charliedavis@example.com', 3 ],
+  [ 'stevecarter@example.com', 2 ],
+  [ 'jackking@example.com', 2 ]
+]
+--------------------users in selectIds before
+[
+  [ 'alicejohnson@mail.com', 3 ],
+  [ 'johndoe@example.com', 2 ],
+  [ 'gracegreen@example.com', 3 ],
+  [ 'noahyoung@test.com', 3 ],
+  [ 'quinnallen@test.com', 3 ],
+  [ 'frankwhite@mail.com', 3 ],
+  [ 'charliedavis@example.com', 3 ],
+  [ 'stevecarter@example.com', 2 ],
+  [ 'jackking@example.com', 2 ]
+]
+--------------------users in selectIds after
+[
+  [ 'johndoe@example.com', 2 ],
+  [ 'stevecarter@example.com', 2 ],
+  [ 'jackking@example.com', 2 ],
+  [ 'alicejohnson@mail.com', 3 ],
+  [ 'gracegreen@example.com', 3 ],
+  [ 'noahyoung@test.com', 3 ],
+  [ 'quinnallen@test.com', 3 ],
+  [ 'frankwhite@mail.com', 3 ],
+  [ 'charliedavis@example.com', 3 ]
+]
+--------------------groups in selectIds
+{
+  '2': [
+    'johndoe@example.com',
+    'stevecarter@example.com',
+    'jackking@example.com'
+  ],
+  '3': [
+    'alicejohnson@mail.com',
+    'gracegreen@example.com',
+    'noahyoung@test.com',
+    'quinnallen@test.com',
+    'frankwhite@mail.com',
+    'charliedavis@example.com'
+  ]
+}
+--------------------tokenCounts in selectIds
+[ 2, 3 ]
+Token count:  2
+Token count:  3
+--------------------selectedIds in selectIds
+[
+  'johndoe@example.com',
+  'stevecarter@example.com',
+  'jackking@example.com',
+  'frankwhite@mail.com',
+  'gracegreen@example.com',
+  'alicejohnson@mail.com',
+  'noahyoung@test.com',
+  'quinnallen@test.com'
+]
+
+
+
+
