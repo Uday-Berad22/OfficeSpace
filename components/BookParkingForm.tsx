@@ -1,6 +1,191 @@
+// "use client";
+
+// import React, { useState, useEffect } from "react";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import * as z from "zod";
+// import { Alert, AlertTitle } from "@/components/ui/alert";
+// import { Button } from "@/components/ui/button";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import {
+//   Form,
+//   FormControl,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import { bookParking } from "../actions/bookParking";
+// import { Toaster, toast } from "react-hot-toast";
+
+// const formSchema = z.object({
+//   arrivalTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+//     message: "Invalid time format. Use HH:MM (24-hour format).",
+//   }),
+//   departureTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+//     message: "Invalid time format. Use HH:MM (24-hour format).",
+//   }),
+//   wantToCarPool: z.boolean().default(false),
+//   availableSeats: z.number().min(0).max(4).optional(),
+// });
+
+// type FormValues = z.infer<typeof formSchema>;
+
+// export function BookParkingForm() {
+//   const [isFormAvailable, setIsFormAvailable] = useState(false);
+
+//   const form = useForm<FormValues>({
+//     resolver: zodResolver(formSchema),
+//     defaultValues: {
+//       arrivalTime: "",
+//       departureTime: "",
+//       wantToCarPool: false,
+//       availableSeats: 0,
+//     },
+//   });
+
+//   useEffect(() => {
+//     const checkFormAvailability = () => {
+//       const now = new Date();
+//       const hours = now.getHours();
+//       setIsFormAvailable(hours >= 12 && hours < 24);
+//     };
+
+//     checkFormAvailability();
+//     const interval = setInterval(checkFormAvailability, 60000); // Check every minute
+
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const onSubmit = async (values: FormValues) => {
+//     const formData = new FormData();
+//     Object.entries(values).forEach(([key, value]) => {
+//       formData.append(key, value.toString());
+//     });
+
+//     const result = await bookParking(formData);
+
+//     if (result.error) {
+//       toast.error(result.error, {
+//         duration: 4000,
+//         position: "top-center",
+//       });
+//     } else if (result.success) {
+//       toast.success(result.message || null, {
+//         duration: 4000,
+//         position: "top-center",
+//       });
+//       form.reset();
+//     } else {
+//       toast.error("An unexpected error occurred", {
+//         duration: 4000,
+//         position: "top-center",
+//       });
+//     }
+//   };
+
+//   if (!isFormAvailable) {
+//     return (
+//       <Alert variant="default" className="mt-4">
+//         <AlertTitle>
+//           Booking form is only available between 6 PM and 11:59 PM.
+//         </AlertTitle>
+//       </Alert>
+//     );
+//   }
+
+//   return (
+//     <>
+//       <Toaster />
+//       <Form {...form}>
+//         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+//           <FormField
+//             control={form.control}
+//             name="arrivalTime"
+//             render={({ field }) => (
+//               <FormItem>
+//                 <FormLabel>Arrival Time</FormLabel>
+//                 <FormControl>
+//                   <Input placeholder="HH:MM" {...field} />
+//                 </FormControl>
+//                 <FormDescription>
+//                   Enter your arrival time in 24-hour format.
+//                 </FormDescription>
+//                 <FormMessage />
+//               </FormItem>
+//             )}
+//           />
+//           <FormField
+//             control={form.control}
+//             name="departureTime"
+//             render={({ field }) => (
+//               <FormItem>
+//                 <FormLabel>Departure Time</FormLabel>
+//                 <FormControl>
+//                   <Input placeholder="HH:MM" {...field} />
+//                 </FormControl>
+//                 <FormDescription>
+//                   Enter your departure time in 24-hour format.
+//                 </FormDescription>
+//                 <FormMessage />
+//               </FormItem>
+//             )}
+//           />
+//           <FormField
+//             control={form.control}
+//             name="wantToCarPool"
+//             render={({ field }) => (
+//               <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+//                 <FormControl>
+//                   <Checkbox
+//                     checked={field.value}
+//                     onCheckedChange={field.onChange}
+//                   />
+//                 </FormControl>
+//                 <div className="space-y-1 leading-none">
+//                   <FormLabel>Want to Car Pool?</FormLabel>
+//                   <FormDescription>
+//                     Check this if youre willing to car pool with others.
+//                   </FormDescription>
+//                 </div>
+//               </FormItem>
+//             )}
+//           />
+//           {form.watch("wantToCarPool") && (
+//             <FormField
+//               control={form.control}
+//               name="availableSeats"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Available Seats</FormLabel>
+//                   <FormControl>
+//                     <Input
+//                       type="number"
+//                       {...field}
+//                       onChange={(e) =>
+//                         field.onChange(parseInt(e.target.value, 10))
+//                       }
+//                     />
+//                   </FormControl>
+//                   <FormDescription>
+//                     Enter the number of available seats in your car.
+//                   </FormDescription>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+//           )}
+//           <Button type="submit">Submit Booking</Button>
+//         </form>
+//       </Form>
+//     </>
+//   );
+// }
+
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -17,8 +202,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { bookParking } from "../actions/bookParking";
-import { Toaster, toast } from "react-hot-toast";
 
 const formSchema = z.object({
   arrivalTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
@@ -34,7 +219,10 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function BookParkingForm() {
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [isFormAvailable, setIsFormAvailable] = useState(false);
+  const [hasSubmittedToday, setHasSubmittedToday] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -50,16 +238,32 @@ export function BookParkingForm() {
     const checkFormAvailability = () => {
       const now = new Date();
       const hours = now.getHours();
-      setIsFormAvailable(hours >= 12 && hours < 24);
+      setIsFormAvailable(hours >= 18 && hours < 24);
+    };
+
+    const checkSubmissionStatus = () => {
+      const lastSubmission = localStorage.getItem("lastParkingSubmission");
+      if (lastSubmission) {
+        const lastSubmissionDate = new Date(lastSubmission);
+        const today = new Date();
+        setHasSubmittedToday(
+          lastSubmissionDate.toDateString() === today.toDateString()
+        );
+      }
     };
 
     checkFormAvailability();
+    checkSubmissionStatus();
+
     const interval = setInterval(checkFormAvailability, 60000); // Check every minute
 
     return () => clearInterval(interval);
   }, []);
 
   const onSubmit = async (values: FormValues) => {
+    setFormError(null);
+    setFormSuccess(null);
+
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value.toString());
@@ -68,21 +272,15 @@ export function BookParkingForm() {
     const result = await bookParking(formData);
 
     if (result.error) {
-      toast.error(result.error, {
-        duration: 4000,
-        position: "top-center",
-      });
+      setFormError(result.error);
     } else if (result.success) {
-      toast.success(result.message || null, {
-        duration: 4000,
-        position: "top-center",
-      });
+      setFormSuccess(result.message || "Booking successful!");
       form.reset();
+      localStorage.setItem("lastParkingSubmission", new Date().toISOString());
+      setHasSubmittedToday(true);
     } else {
-      toast.error("An unexpected error occurred", {
-        duration: 4000,
-        position: "top-center",
-      });
+      // Handle unexpected result
+      setFormError("An unexpected error occurred");
     }
   };
 
@@ -96,90 +294,108 @@ export function BookParkingForm() {
     );
   }
 
+  if (hasSubmittedToday) {
+    return (
+      <Alert variant="default" className="mt-4">
+        <AlertTitle>
+          You have already submitted a booking request today.
+        </AlertTitle>
+      </Alert>
+    );
+  }
+
   return (
-    <>
-      <Toaster />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {/* Form fields remain the same */}
+        <FormField
+          control={form.control}
+          name="arrivalTime"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Arrival Time</FormLabel>
+              <FormControl>
+                <Input placeholder="HH:MM" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter your arrival time in 24-hour format.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="departureTime"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Departure Time</FormLabel>
+              <FormControl>
+                <Input placeholder="HH:MM" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter your departure time in 24-hour format.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="wantToCarPool"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>Want to Car Pool?</FormLabel>
+                <FormDescription>
+                  Check this if you&apos;re willing to car pool with others.
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
+        {form.watch("wantToCarPool") && (
           <FormField
             control={form.control}
-            name="arrivalTime"
+            name="availableSeats"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Arrival Time</FormLabel>
+                <FormLabel>Available Seats</FormLabel>
                 <FormControl>
-                  <Input placeholder="HH:MM" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Enter your arrival time in 24-hour format.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="departureTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Departure Time</FormLabel>
-                <FormControl>
-                  <Input placeholder="HH:MM" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Enter your departure time in 24-hour format.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="wantToCarPool"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(parseInt(e.target.value, 10))
+                    }
                   />
                 </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Want to Car Pool?</FormLabel>
-                  <FormDescription>
-                    Check this if youre willing to car pool with others.
-                  </FormDescription>
-                </div>
+                <FormDescription>
+                  Enter the number of available seats in your car.
+                </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
-          {form.watch("wantToCarPool") && (
-            <FormField
-              control={form.control}
-              name="availableSeats"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Available Seats</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(parseInt(e.target.value, 10))
-                      }
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Enter the number of available seats in your car.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-          <Button type="submit">Submit Booking</Button>
-        </form>
-      </Form>
-    </>
+        )}
+        <Button type="submit">Submit Booking</Button>
+      </form>
+      {formError && (
+        <Alert variant="destructive" className="mt-4">
+          <AlertTitle>Error: {formError}</AlertTitle>
+        </Alert>
+      )}
+      {formSuccess && (
+        <Alert variant="default" className="mt-4">
+          <AlertTitle>{formSuccess}</AlertTitle>
+        </Alert>
+      )}
+    </Form>
   );
 }

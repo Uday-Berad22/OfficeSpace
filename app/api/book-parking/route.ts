@@ -1,61 +1,140 @@
-// import { NextRequest, NextResponse } from 'next/server';
-// import { getDatabase, User } from '@/lib/database';
-// import { currentUser } from '@clerk/nextjs/server'
+// // import { NextRequest, NextResponse } from 'next/server';
+// // import { getDatabase, User } from '@/lib/database';
+// // import { currentUser } from '@clerk/nextjs/server'
 
-// export async function POST(req: NextRequest) {
-//   try {
-//     const db = await getDatabase();
-//     const temp = await currentUser();
+// // export async function POST(req: NextRequest) {
+// //   try {
+// //     const db = await getDatabase();
+// //     const temp = await currentUser();
 
-//     if(!temp) {
-//       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-//     }
-//     const user = await db.collection<User>('users').findOne({ email: temp.emailAddresses[0].emailAddress });
+// //     if(!temp) {
+// //       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+// //     }
+// //     const user = await db.collection<User>('users').findOne({ email: temp.emailAddresses[0].emailAddress });
 
-//     if(!user) {
-//       // If user is not found, create a new user
-//       await db.collection<User>('users').insertOne({
-//         email: temp.emailAddresses[0].emailAddress,
-//         user_id: temp.id,
-//         access_level: 'user',
-//         name: temp.fullName || "User",
-//         used_tokens: 0,
-//       });
+// //     if(!user) {
+// //       // If user is not found, create a new user
+// //       await db.collection<User>('users').insertOne({
+// //         email: temp.emailAddresses[0].emailAddress,
+// //         user_id: temp.id,
+// //         access_level: 'user',
+// //         name: temp.fullName || "User",
+// //         used_tokens: 0,
+// //       });
 
-//     }
-//     const { arrivalTime, departureTime,  wantToCarPool, availableSeats } = await req.json();
+// //     }
+// //     const { arrivalTime, departureTime,  wantToCarPool, availableSeats } = await req.json();
 
-//     // Get user from database based on Clerk userId
+// //     // Get user from database based on Clerk userId
 
-//     if (!user) {
-//       return NextResponse.json({ message: 'User not found' }, { status: 404 });
-//     }
+// //     if (!user) {
+// //       return NextResponse.json({ message: 'User not found' }, { status: 404 });
+// //     }
 
-//     // Create booking
-//     const bookingResult = await db.collection('bookings').insertOne({
-//       email: temp.emailAddresses[0].emailAddress,
-//       arrivalTime,
-//       departureTime,
-//       wantToCarPool,
-//       availableSeats,
-//       createdAt: new Date(),
-//       status: 'pending', // You can use this to track the booking status
-//     });
+// //     // Create booking
+// //     const bookingResult = await db.collection('bookings').insertOne({
+// //       email: temp.emailAddresses[0].emailAddress,
+// //       arrivalTime,
+// //       departureTime,
+// //       wantToCarPool,
+// //       availableSeats,
+// //       createdAt: new Date(),
+// //       status: 'pending', // You can use this to track the booking status
+// //     });
 
-//     if (!bookingResult.insertedId) {
-//       return NextResponse.json({ message: 'Failed to create booking' }, { status: 500 });
-//     }
+// //     if (!bookingResult.insertedId) {
+// //       return NextResponse.json({ message: 'Failed to create booking' }, { status: 500 });
+// //     }
 
-//     return NextResponse.json({
-//       message: 'Booking created successfully',
-//       bookingId: bookingResult.insertedId,
-//     }, { status: 200 });
+// //     return NextResponse.json({
+// //       message: 'Booking created successfully',
+// //       bookingId: bookingResult.insertedId,
+// //     }, { status: 200 });
 
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json({ message: 'Error creating booking' }, { status: 500 });
-//   }
-// }
+// //   } catch (error) {
+// //     console.error(error);
+// //     return NextResponse.json({ message: 'Error creating booking' }, { status: 500 });
+// //   }
+// // }
+
+// // import { NextRequest, NextResponse } from "next/server";
+// // import { getDatabase, User } from "@/lib/database";
+// // import { currentUser } from "@clerk/nextjs/server";
+
+// // export async function POST(req: NextRequest) {
+// //   try {
+// //     const db = await getDatabase();
+// //     const temp = await currentUser();
+
+// //     if (!temp) {
+// //       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+// //     }
+
+// //     const userEmail = temp.emailAddresses[0].emailAddress;
+// //     const user = await db
+// //       .collection<User>("users")
+// //       .findOne({ email: userEmail });
+
+// //     if (!user) {
+// //       await db.collection<User>("users").insertOne({
+// //         email: temp.emailAddresses[0].emailAddress,
+// //         user_id: temp.id,
+// //         access_level: "user",
+// //         name: temp.fullName || "User",
+// //         used_tokens: 0,
+// //       });
+// //     }
+
+// //     // Check if the user has already submitted a booking today
+
+// //     const existingBooking = await db.collection("bookings").findOne({
+// //       email: userEmail,
+// //     });
+
+// //     if (existingBooking) {
+// //       return NextResponse.json(
+// //         { error: "You have already submitted a booking request today." },
+// //         { status: 400 }
+// //       );
+// //     }
+
+// //     const { arrivalTime, departureTime, wantToCarPool, availableSeats } =
+// //       await req.json();
+
+// //     // Create booking
+// //     const bookingResult = await db.collection("bookings").insertOne({
+// //       email: userEmail,
+// //       arrivalTime,
+// //       departureTime,
+// //       wantToCarPool,
+// //       availableSeats,
+// //       createdAt: new Date(),
+// //       status: "pending",
+// //     });
+
+// //     if (!bookingResult.insertedId) {
+// //       return NextResponse.json(
+// //         { error: "Failed to create booking" },
+// //         { status: 500 }
+// //       );
+// //     }
+
+// //     return NextResponse.json(
+// //       {
+// //         success: true,
+// //         message: "Booking created successfully",
+// //         bookingId: bookingResult.insertedId,
+// //       },
+// //       { status: 200 }
+// //     );
+// //   } catch (error) {
+// //     console.error(error);
+// //     return NextResponse.json(
+// //       { error: "Error creating booking" },
+// //       { status: 500 }
+// //     );
+// //   }
+// // }
 
 // import { NextRequest, NextResponse } from "next/server";
 // import { getDatabase, User } from "@/lib/database";
@@ -86,7 +165,6 @@
 //     }
 
 //     // Check if the user has already submitted a booking today
-
 //     const existingBooking = await db.collection("bookings").findOne({
 //       email: userEmail,
 //     });
@@ -146,15 +224,14 @@ export async function POST(req: NextRequest) {
     const temp = await currentUser();
 
     if (!temp) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-
-    const userEmail = temp.emailAddresses[0].emailAddress;
     const user = await db
       .collection<User>("users")
-      .findOne({ email: userEmail });
+      .findOne({ email: temp.emailAddresses[0].emailAddress });
 
     if (!user) {
+      // If user is not found, create a new user
       await db.collection<User>("users").insertOne({
         email: temp.emailAddresses[0].emailAddress,
         user_id: temp.id,
@@ -163,43 +240,35 @@ export async function POST(req: NextRequest) {
         used_tokens: 0,
       });
     }
-
-    // Check if the user has already submitted a booking today
-    const existingBooking = await db.collection("bookings").findOne({
-      email: userEmail,
-    });
-
-    if (existingBooking) {
-      return NextResponse.json(
-        { error: "You have already submitted a booking request today." },
-        { status: 400 }
-      );
-    }
-
     const { arrivalTime, departureTime, wantToCarPool, availableSeats } =
       await req.json();
 
+    // Get user from database based on Clerk userId
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
     // Create booking
     const bookingResult = await db.collection("bookings").insertOne({
-      email: userEmail,
+      email: temp.emailAddresses[0].emailAddress,
       arrivalTime,
       departureTime,
       wantToCarPool,
       availableSeats,
       createdAt: new Date(),
-      status: "pending",
+      status: "pending", // You can use this to track the booking status
     });
 
     if (!bookingResult.insertedId) {
       return NextResponse.json(
-        { error: "Failed to create booking" },
+        { message: "Failed to create booking" },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
       {
-        success: true,
         message: "Booking created successfully",
         bookingId: bookingResult.insertedId,
       },
@@ -208,7 +277,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error creating booking" },
+      { message: "Error creating booking" },
       { status: 500 }
     );
   }
