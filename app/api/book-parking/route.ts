@@ -315,7 +315,7 @@ export async function POST(req: NextRequest) {
     // Check if the user has an existing booking
     const existingBooking = await db.collection("bookings").findOne({
       email: userEmail,
-      status: { $in: ["pending", "approved"] }, // Check for both pending and approved bookings
+      // Check for both pending and approved bookings
     });
 
     if (existingBooking) {
@@ -380,7 +380,6 @@ export async function GET() {
     // Check if the user has an existing booking
     const existingBooking = await db.collection("bookings").findOne({
       email: userEmail,
-      status: { $in: ["pending", "approved"] },
     });
 
     if (existingBooking) {
