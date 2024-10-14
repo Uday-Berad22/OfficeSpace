@@ -50,7 +50,7 @@ export function BookParkingForm() {
     const checkFormAvailability = () => {
       const now = new Date();
       const hours = now.getHours();
-      setIsFormAvailable(hours >= 18 && hours < 24);
+      setIsFormAvailable(hours >= 12 && hours < 24);
     };
 
     checkFormAvailability();
