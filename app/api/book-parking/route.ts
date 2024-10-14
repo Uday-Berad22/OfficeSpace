@@ -315,7 +315,6 @@ export async function POST(req: NextRequest) {
     // Check if the user has an existing booking
     const existingBooking = await db.collection("bookings").findOne({
       email: userEmail,
-      // Check for both pending and approved bookings
     });
 
     if (existingBooking) {

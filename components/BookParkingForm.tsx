@@ -457,7 +457,7 @@ export function BookParkingForm() {
 
     const checkExistingBooking = async () => {
       try {
-        const response = await fetch("/api/bookParking", {
+        const response = await fetch("/api/book-parking", {
           method: "GET",
         });
         const data = await response.json();
