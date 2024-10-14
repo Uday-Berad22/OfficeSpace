@@ -67,6 +67,7 @@ interface Booking {
   departureTime: string;
   wantToCarPool: boolean;
   availableSeats: number;
+  name: string;
 }
 
 export function ParkingAllottedList() {
@@ -101,6 +102,7 @@ export function ParkingAllottedList() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Arrival Time</TableHead>
             <TableHead>Departure Time</TableHead>
@@ -112,6 +114,7 @@ export function ParkingAllottedList() {
         <TableBody>
           {approvedBookings.map((booking, index) => (
             <TableRow key={index}>
+              <TableCell>{booking.name}</TableCell>
               <TableCell>{booking.email}</TableCell>
               <TableCell>{booking.arrivalTime}</TableCell>
               <TableCell>{booking.departureTime}</TableCell>

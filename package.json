@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "formidable": "^3.5.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.446.0",
     "mongoose": "^8.6.3",
@@ -28,12 +29,14 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
+    "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/node-cron": "^3.0.11",
