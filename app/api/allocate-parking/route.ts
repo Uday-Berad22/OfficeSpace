@@ -54,28 +54,6 @@ function selectIds(users: [string, number][], numToSelect: number): string[] {
 }
 
 export async function GET(request: NextRequest) {
-  //   const { APP_KEY } = process.env;
-  //   const authHeader = request.headers.get("authorization");
-
-  //   if (authHeader !== APP_KEY) {
-  //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  //   }
-  //   const { APP_KEY } = process.env;
-
-  //   // Get the URL of the request and parse the search parameters
-  //   const url = new URL(request.url);
-  //   let secret = url.searchParams.get("secret"); // Accessing the query parameter 'secret'
-  //   if (secret?.length !== 0 && secret !== undefined && secret !== null) {
-  //     //remove last character
-  //     secret = secret.slice(0, -1);
-  //   }
-  //   // Check if the secret in the query matches the one in the .env file
-  //   if (!secret || secret !== APP_KEY) {
-  //     return NextResponse.json(
-  //       { error: `Unauthorized secret :${secret} and APP_KEY : ${APP_KEY}` },
-  //       { status: 401 }
-  //     );
-  //   }
   if (
     request.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
   ) {
